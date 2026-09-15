@@ -1,5 +1,7 @@
 "use client";
 
+import { postUser } from "@/actions/server/auth";
+
 const RegisterForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -16,6 +18,8 @@ const RegisterForm = () => {
     };
 
     console.log("Submitted Data:", formData);
+
+    postUser(formData);
   };
 
   const inputClass =

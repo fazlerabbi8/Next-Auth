@@ -17,7 +17,7 @@ const UserCard = () => {
 
   return (
     <div>
-      <p className="border p-5">Signed in as {session.user.name}</p>
+      <p className="border p-5">Signed in as {session.user.name} and {status}</p>
       <p className="border p-5">{JSON.stringify(session)}</p>
 
       <button className="btn" onClick={() => signOut()}>
