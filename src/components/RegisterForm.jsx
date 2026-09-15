@@ -3,7 +3,7 @@
 import { postUser } from "@/actions/server/auth";
 
 const RegisterForm = () => {
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const form = e.target;
@@ -17,9 +17,16 @@ const RegisterForm = () => {
       bloodgroup: form.bloodgroup.value,
     };
 
-    console.log("Submitted Data:", formData);
-
-    postUser(formData);
+    try {
+      const result = await postUser(formData);
+      alert(result.message);
+      if (result.success) {
+        form.reset(); // optional: clear form on success
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Something went wrong. Please try again.");
+    }
   };
 
   const inputClass =
