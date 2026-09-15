@@ -1,5 +1,8 @@
+import { dbConnect } from "@/lib/dbConnect";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import bcrypt from 'bcryptjs';
+import { use } from "react";
 
 const userList = [{ id: "1", name: "ali", password: "123456", secretCode: "1478" }];
 
@@ -15,26 +18,25 @@ export const authOptions = {
       // e.g. domain, username, password, 2FA token, etc.
       // You can pass any HTML attribute to the <input> tag through the object.
       credentials: {
-        username: { label: "Username", type: "text", placeholder: "Username" },
+        email: { label: "Email", type: "email", placeholder: "Enter email" },
         password: {
           label: "Password",
           type: "password",
           placeholder: "enter password",
         },
-        secretCode: {
-          label: "secret code",
-          type: "number",
-          placeholder: "enter code",
-        },
       },
       async authorize(credentials) {
-        const { username, password } = credentials || {};
+        const { email, password } = credentials || {};
 
-        const user = userList.find((u) => u.name === username);
+        // const user = userList.find((u) => u.name === username);
+
+        const user = await dbConnect("users").findOne({email})
 
         if (!user) return null;
 
-        if (user.password !== password) {
+        const isPass = await bcrypt.compare(password, user.password)
+
+        if (!isPass) {
           return null;
         }
 
